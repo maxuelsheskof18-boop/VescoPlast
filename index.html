@@ -4,10 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vescoplast | Embalagens para o seu negócio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; }
     :root {
       --brand-50: #effcf6; --brand-100: #d9f8e7;
       --brand-500: #0d9b58; --brand-600: #087c47;
@@ -96,14 +101,30 @@
     #whatsapp-float:hover { transform:scale(1.12);background:#1daf57; }
     .fade-in-up { opacity:0;transform:translateY(28px);transition:opacity .55s,transform .55s; }
     .fade-in-up.is-visible { opacity:1;transform:translateY(0); }
-    table { border-collapse:collapse;width:100%; }
-    th,td { border:1px solid #e2e8f0;padding:.5rem .75rem;text-align:center;font-size:.8rem; }
-    th { background:#073b27;color:#fff;font-weight:700; }
+    table { border-collapse:collapse;width:100%;min-width:420px; }
+    th,td { border:1px solid #e2e8f0;padding:.45rem .6rem;text-align:center;font-size:.75rem;font-family:'Inter',sans-serif;font-weight:500; }
+    th { background:#073b27;color:#fff;font-weight:700;font-size:.7rem;letter-spacing:.03em; }
     tr:nth-child(even) td { background:#f8fafc; }
     .stretch-banner { width:100%;height:220px;object-fit:cover;border-radius:1rem;margin-bottom:1.5rem; }
+    /* Responsividade tabs */
+    .tabs-scroll { display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center; }
+    @media(max-width:640px){
+      .tabs-scroll { flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding-bottom:.5rem;-webkit-overflow-scrolling:touch;scrollbar-width:none; }
+      .tabs-scroll::-webkit-scrollbar { display:none; }
+      .tab-btn { white-space:nowrap;flex-shrink:0; }
+      .hero-section { min-height:520px !important; }
+    }
+    /* Tipografia profissional */
+    h1,h2,h3,h4,h5,h6 { font-family:'Inter',sans-serif;letter-spacing:-0.02em; }
+    p, span, a, li, td, th, button { font-family:'Inter',sans-serif; }
+    .font-black { font-weight:900; }
+    .font-extrabold { font-weight:800; }
+    .font-bold { font-weight:700; }
+    .tracking-tight { letter-spacing:-0.025em; }
+    .tracking-widest { letter-spacing:0.1em; }
   </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800 antialiased">
+<body class="bg-slate-50 text-slate-800 antialiased" style="font-family:'Inter',sans-serif;">
 
   <!-- Header -->
   <header class="sticky top-0 z-40 border-b border-slate-100 bg-white/95 backdrop-blur" id="main-header">
