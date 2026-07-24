@@ -1,104 +1,343 @@
 /* =============================================
-   VESCOPLAST — main.js
+   VESCOPLAST — comportamento responsivo
    ============================================= */
 
-/* ── Ano dinâmico no rodapé ── */
-document.getElementById('currentYear').textContent = new Date().getFullYear();
+(() => {
+  'use strict';
 
+  const root = document.documentElement;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)');
 
-/* ── Scroll suave para links âncora internos ── */
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    const target = document.querySelector(this.getAttribute('href'));
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  root.classList.add('js');
+
+  const state = {
+    carouselTimer: null,
+    currentSlide: 0,
+    resizeFrame: null,
+    touchStartX: 0,
+    touchStartY: 0,
+  };
+
+  const qs = (selector, context = document) => context.querySelector(selector);
+  const qsa = (selector, context = document) => [...context.querySelectorAll(selector)];
+
+  /**
+   * Função central de responsividade.
+   * Atualiza a altura útil real do navegador, identifica o tipo de tela
+   * e fecha elementos mobile quando o viewport muda para desktop.
+   */
+  function applyResponsiveLayout() {
+    const visualViewport = window.visualViewport;
+    const width = Math.round(visualViewport?.width || window.innerWidth);
+    const height = Math.round(visualViewport?.height || window.innerHeight);
+    const viewport = width < 640 ? 'mobile' : width < 1024 ? 'tablet' : 'desktop';
+
+    // Densidade automática: diminui apenas o necessário em telas estreitas/baixas.
+    let density = 'comfortable';
+    if (width < 768 && (width <= 360 || height <= 620)) {
+      density = 'ultra-compact';
+    } else if (width < 768 && (width <= 480 || height <= 760)) {
+      density = 'compact';
     }
+
+    root.style.setProperty('--app-height', `${height}px`);
+    root.style.setProperty('--viewport-width', `${width}px`);
+    root.style.setProperty('--viewport-height', `${height}px`);
+    root.dataset.viewport = viewport;
+    root.dataset.density = density;
+    root.classList.toggle('is-mobile', viewport === 'mobile');
+    root.classList.toggle('is-tablet', viewport === 'tablet');
+    root.classList.toggle('is-desktop', viewport === 'desktop');
+    root.classList.toggle('is-compact-ui', density !== 'comfortable');
+    root.classList.toggle('is-ultra-compact-ui', density === 'ultra-compact');
+
+    if (width >= 768) {
+      setMobileMenu(false);
+    }
+  }
+
+  function scheduleResponsiveLayout() {
+    if (state.resizeFrame) cancelAnimationFrame(state.resizeFrame);
+    state.resizeFrame = requestAnimationFrame(applyResponsiveLayout);
+  }
+
+  /* Ano do rodapé */
+  const currentYear = qs('#currentYear');
+  if (currentYear) currentYear.textContent = String(new Date().getFullYear());
+
+  /* Menu mobile */
+  const menuButton = qs('#mobile-menu-button');
+  const mobileMenu = qs('#mobile-menu');
+
+  function setMobileMenu(open) {
+    if (!menuButton || !mobileMenu) return;
+
+    menuButton.setAttribute('aria-expanded', String(open));
+    menuButton.setAttribute('aria-label', open ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
+    mobileMenu.hidden = !open;
+
+    const icon = qs('i', menuButton);
+    if (icon) {
+      icon.classList.toggle('fa-bars', !open);
+      icon.classList.toggle('fa-xmark', open);
+    }
+  }
+
+  if (menuButton && mobileMenu) {
+    menuButton.addEventListener('click', () => {
+      setMobileMenu(menuButton.getAttribute('aria-expanded') !== 'true');
+    });
+
+    qsa('a', mobileMenu).forEach(link => {
+      link.addEventListener('click', () => setMobileMenu(false));
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') setMobileMenu(false);
+    });
+  }
+
+  /* Carousel */
+  const hero = qs('#hero');
+  const slides = qsa('.hero-slide');
+  const dots = qsa('.hero-dot');
+  const progress = qs('#hero-progress');
+  const carouselInterval = 4500;
+
+  function restartProgress() {
+    if (!progress) return;
+
+    progress.style.animation = 'none';
+    // Força reflow para reiniciar a animação.
+    void progress.offsetWidth;
+    progress.style.animation = reducedMotion.matches
+      ? 'none'
+      : `progressBar ${carouselInterval}ms linear infinite`;
+  }
+
+  function goToSlide(index) {
+    if (!slides.length) return;
+
+    const normalized = (Number(index) + slides.length) % slides.length;
+    state.currentSlide = normalized;
+
+    slides.forEach((slide, position) => {
+      const active = position === normalized;
+      slide.classList.toggle('active', active);
+      slide.setAttribute('aria-hidden', String(!active));
+    });
+
+    dots.forEach((dot, position) => {
+      const active = position === normalized;
+      dot.classList.toggle('active', active);
+      dot.setAttribute('aria-current', String(active));
+    });
+
+    restartProgress();
+  }
+
+  function stopCarousel() {
+    if (state.carouselTimer) {
+      window.clearInterval(state.carouselTimer);
+      state.carouselTimer = null;
+    }
+  }
+
+  function startCarousel() {
+    stopCarousel();
+    if (slides.length <= 1 || reducedMotion.matches || document.hidden) return;
+
+    state.carouselTimer = window.setInterval(() => {
+      goToSlide(state.currentSlide + 1);
+    }, carouselInterval);
+  }
+
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      goToSlide(Number(dot.dataset.slideIndex ?? index));
+      startCarousel();
+    });
   });
-});
 
+  if (hero) {
+    if (hoverCapable.matches) {
+      hero.addEventListener('mouseenter', stopCarousel);
+      hero.addEventListener('mouseleave', startCarousel);
+    }
 
-/* ── Header: sombra ao rolar ── */
-const header = document.querySelector('header');
+    hero.addEventListener('touchstart', event => {
+      const touch = event.changedTouches[0];
+      state.touchStartX = touch.clientX;
+      state.touchStartY = touch.clientY;
+      stopCarousel();
+    }, { passive: true });
 
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 10) {
-    header.classList.add('shadow-md');
+    hero.addEventListener('touchend', event => {
+      const touch = event.changedTouches[0];
+      const deltaX = touch.clientX - state.touchStartX;
+      const deltaY = touch.clientY - state.touchStartY;
+
+      if (Math.abs(deltaX) > 55 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        goToSlide(state.currentSlide + (deltaX < 0 ? 1 : -1));
+      }
+      startCarousel();
+    }, { passive: true });
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopCarousel();
+    else startCarousel();
+  });
+
+  reducedMotion.addEventListener?.('change', () => {
+    restartProgress();
+    startCarousel();
+  });
+
+  /* Abas de produtos */
+  function switchTab(tabName, options = {}) {
+    const button = document.getElementById(`tab-${tabName}`);
+    const content = document.getElementById(`content-${tabName}`);
+    if (!button || !content) return;
+
+    qsa('.tab-btn').forEach(item => {
+      const active = item === button;
+      item.classList.toggle('active', active);
+      item.setAttribute('aria-selected', String(active));
+      item.tabIndex = active ? 0 : -1;
+    });
+
+    qsa('.tab-content').forEach(panel => {
+      const active = panel === content;
+      panel.classList.toggle('active', active);
+      panel.hidden = !active;
+    });
+
+    button.scrollIntoView({
+      behavior: reducedMotion.matches ? 'auto' : 'smooth',
+      block: 'nearest',
+      inline: 'center',
+    });
+
+    if (options.scrollToProducts) {
+      const section = qs('#produtos');
+      section?.scrollIntoView({
+        behavior: reducedMotion.matches ? 'auto' : 'smooth',
+        block: 'start',
+      });
+    }
+  }
+
+  qsa('[data-tab-target]').forEach(control => {
+    control.addEventListener('click', event => {
+      const tabName = control.dataset.tabTarget;
+      if (!tabName) return;
+
+      if (control.tagName === 'A') event.preventDefault();
+      switchTab(tabName, { scrollToProducts: control.closest('.hero-slide') !== null });
+    });
+  });
+
+  qsa('.tab-btn').forEach((button, index, buttons) => {
+    button.addEventListener('keydown', event => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+
+      let nextIndex = index;
+      if (event.key === 'ArrowLeft') nextIndex = (index - 1 + buttons.length) % buttons.length;
+      if (event.key === 'ArrowRight') nextIndex = (index + 1) % buttons.length;
+      if (event.key === 'Home') nextIndex = 0;
+      if (event.key === 'End') nextIndex = buttons.length - 1;
+
+      const next = buttons[nextIndex];
+      next.focus();
+      switchTab(next.dataset.tabTarget, { scrollToProducts: false });
+    });
+  });
+
+  // Estado inicial acessível das abas.
+  qsa('.tab-content').forEach(panel => {
+    panel.hidden = !panel.classList.contains('active');
+  });
+
+  /* Scroll suave de links internos que não controlam abas */
+  qsa('a[href^="#"]:not([data-tab-target])').forEach(anchor => {
+    anchor.addEventListener('click', event => {
+      const href = anchor.getAttribute('href');
+      if (!href || href === '#') return;
+
+      const target = qs(href);
+      if (!target) return;
+
+      event.preventDefault();
+      target.scrollIntoView({
+        behavior: reducedMotion.matches ? 'auto' : 'smooth',
+        block: 'start',
+      });
+      setMobileMenu(false);
+    });
+  });
+
+  /* Sombra do header */
+  const header = qs('#main-header');
+  function updateHeaderShadow() {
+    header?.classList.toggle('shadow-md', window.scrollY > 10);
+  }
+  window.addEventListener('scroll', updateHeaderShadow, { passive: true });
+
+  /* Animação de entrada */
+  const animatedCards = qsa('.product-card, .diferencial-card, .insta-card');
+  if ('IntersectionObserver' in window && !reducedMotion.matches) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+    animatedCards.forEach(card => {
+      card.classList.add('fade-in-up');
+      observer.observe(card);
+    });
   } else {
-    header.classList.remove('shadow-md');
+    animatedCards.forEach(card => card.classList.add('is-visible'));
   }
-});
 
-
-/* ── Animação de entrada dos cards de produto (Intersection Observer) ── */
-const observerOptions = {
-  threshold: 0.12,
-  rootMargin: '0px 0px -40px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('is-visible');
-      observer.unobserve(entry.target);
-    }
-  });
-}, observerOptions);
-
-document.querySelectorAll('.product-card, .diferencial-card, .insta-card').forEach(el => {
-  el.classList.add('fade-in-up');
-  observer.observe(el);
-});
-
-
-/* ── Botão flutuante: pulso de atenção a cada 8s ── */
-const floatBtn = document.getElementById('whatsapp-float');
-
-function pulseFloat() {
-  floatBtn.style.transform = 'scale(1.2)';
-  setTimeout(() => {
-    floatBtn.style.transform = 'scale(1)';
-  }, 300);
-}
-
-setInterval(pulseFloat, 8000);
-
-
-/* ── Tooltip no botão flutuante ── */
-const tooltip = document.createElement('span');
-tooltip.textContent = 'Fale conosco!';
-tooltip.style.cssText = `
-  position: absolute;
-  right: 4.5rem;
-  background: #1e293b;
-  color: #fff;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.35rem 0.75rem;
-  border-radius: 0.5rem;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-`;
-floatBtn.style.position = 'fixed';
-floatBtn.appendChild(tooltip);
-
-floatBtn.addEventListener('mouseenter', () => { tooltip.style.opacity = '1'; });
-floatBtn.addEventListener('mouseleave', () => { tooltip.style.opacity = '0'; });
-
-
-/* ── Injeção do CSS de animação fade-in-up via JS ── */
-const animStyle = document.createElement('style');
-animStyle.textContent = `
-  .fade-in-up {
-    opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.55s ease, transform 0.55s ease;
+  /* Pulso discreto do WhatsApp */
+  const floatButton = qs('#whatsapp-float');
+  if (floatButton && !reducedMotion.matches) {
+    window.setInterval(() => {
+      floatButton.classList.remove('is-pulsing');
+      void floatButton.offsetWidth;
+      floatButton.classList.add('is-pulsing');
+    }, 8000);
   }
-  .fade-in-up.is-visible {
-    opacity: 1;
-    transform: translateY(0);
+
+  // Quando o CTA final aparece, ele substitui o botão flutuante no mobile.
+  const contactSection = qs('#contato');
+  if (floatButton && contactSection && 'IntersectionObserver' in window) {
+    const contactObserver = new IntersectionObserver(entries => {
+      const visible = entries.some(entry => entry.isIntersecting);
+      floatButton.classList.toggle('is-cta-visible', visible);
+    }, { threshold: 0.08 });
+
+    contactObserver.observe(contactSection);
   }
-`;
-document.head.appendChild(animStyle);
+
+  /* Eventos globais de responsividade */
+  window.addEventListener('resize', scheduleResponsiveLayout, { passive: true });
+  window.addEventListener('orientationchange', scheduleResponsiveLayout, { passive: true });
+  window.visualViewport?.addEventListener('resize', scheduleResponsiveLayout, { passive: true });
+
+  applyResponsiveLayout();
+  updateHeaderShadow();
+  goToSlide(0);
+  startCarousel();
+
+  // Compatibilidade com chamadas antigas do projeto.
+  window.goToSlide = goToSlide;
+  window.switchTab = tabName => switchTab(tabName, { scrollToProducts: true });
+  window.applyResponsiveLayout = applyResponsiveLayout;
+})();
