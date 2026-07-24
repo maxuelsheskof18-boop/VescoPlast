@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vescoplast | Embalagens para o seu negócio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    :root {
+      --brand-50: #effcf6; --brand-100: #d9f8e7;
+      --brand-500: #0d9b58; --brand-600: #087c47;
+      --brand-700: #06633a; --brand-900: #073b27;
+    }
+
+    /* ===== HERO CAROUSEL ===== */
+    .hero-section { position:relative; overflow:hidden; min-height:600px; }
+    .hero-slide {
+      position:absolute; inset:0; opacity:0;
+      transition:opacity 1s ease-in-out;
+      display:flex; align-items:center;
+    }
+    .hero-slide.active { opacity:1; z-index:1; }
+    .hero-slide-bg {
+      position:absolute; inset:0; width:100%; height:100%;
+      object-fit:cover; filter:brightness(0.65);
+    }
+    .hero-slide-video {
+      position:absolute; inset:0; width:100%; height:100%;
+      object-fit:cover; opacity:0.25; filter:blur(3px);
+    }
+    .hero-slide-overlay {
+      position:absolute; inset:0;
+    }
+    .hero-slide-content { position:relative; z-index:2; width:100%; }
+
+    /* Carousel dots */
+    .hero-dots { position:absolute; bottom:1.5rem; left:50%; transform:translateX(-50%); z-index:10; display:flex; gap:.5rem; }
+    .hero-dot {
+      width:.6rem; height:.6rem; border-radius:9999px;
+      background:rgba(255,255,255,.4); cursor:pointer;
+      transition:all .3s; border:none;
+    }
+    .hero-dot.active { background:#fff; width:1.8rem; }
+
+    /* Carousel progress bar */
+    .hero-progress {
+      position:absolute; bottom:0; left:0; height:3px;
+      background:rgba(255,255,255,.5); z-index:10;
+      animation:progressBar 4.5s linear infinite;
+    }
+    @keyframes progressBar { from{width:0} to{width:100%} }
+
+    .btn-primary {
+      display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+      padding:1rem 1.5rem;background:#fff;color:var(--brand-700);font-weight:800;
+      border-radius:.75rem;box-shadow:0 10px 30px rgba(0,0,0,.15);
+      transition:transform .2s,background-color .2s;text-decoration:none;
+    }
+    .btn-primary:hover { transform:translateY(-2px);background:#ecfdf5; }
+    .btn-ghost {
+      display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+      padding:1rem 1.5rem;border:1px solid rgba(255,255,255,.3);
+      background:rgba(255,255,255,.1);color:#fff;font-weight:800;
+      border-radius:.75rem;transition:transform .2s,background-color .2s;text-decoration:none;
+    }
+    .btn-ghost:hover { transform:translateY(-2px);background:rgba(255,255,255,.2); }
+    .btn-whatsapp {
+      display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+      padding:.75rem 1rem;background:#25D366;color:#fff;font-size:.875rem;
+      font-weight:800;border-radius:.75rem;transition:background-color .2s,transform .2s;
+      text-decoration:none;
+    }
+    .btn-whatsapp:hover { background:#1daf57;transform:translateY(-1px); }
+    .product-card { transition:transform .3s,box-shadow .3s,border-color .3s; }
+    .product-card:hover { transform:translateY(-4px);box-shadow:0 18px 50px rgba(8,124,71,.12);border-color:#d9f8e7; }
+    .tab-btn { transition:all .2s; }
+    .tab-btn.active { background:var(--brand-600);color:#fff;box-shadow:0 4px 15px rgba(8,124,71,.3); }
+    .tab-content { display:none; }
+    .tab-content.active { display:block; }
+    /* Slideshow coloridos */
+    .color-slideshow { overflow:hidden;position:relative; }
+    .color-track { display:flex;animation:slideColors 12s infinite linear; }
+    @keyframes slideColors { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .color-slide-img { min-width:120px;height:120px;object-fit:cover;border-radius:.75rem;margin-right:.75rem; }
+    /* Floating WA */
+    #whatsapp-float {
+      position:fixed;bottom:1.5rem;right:1.5rem;z-index:50;
+      display:flex;align-items:center;justify-content:center;
+      width:4rem;height:4rem;background:#25D366;color:#fff;
+      font-size:1.875rem;border-radius:9999px;
+      box-shadow:0 8px 30px rgba(37,211,102,.45);
+      transition:transform .2s,background-color .2s;text-decoration:none;
+    }
+    #whatsapp-float:hover { transform:scale(1.12);background:#1daf57; }
+    .fade-in-up { opacity:0;transform:translateY(28px);transition:opacity .55s,transform .55s; }
+    .fade-in-up.is-visible { opacity:1;transform:translateY(0); }
+    table { border-collapse:collapse;width:100%; }
+    th,td { border:1px solid #e2e8f0;padding:.5rem .75rem;text-align:center;font-size:.8rem; }
+    th { background:#073b27;color:#fff;font-weight:700; }
+    tr:nth-child(even) td { background:#f8fafc; }
+    .stretch-banner { width:100%;height:220px;object-fit:cover;border-radius:1rem;margin-bottom:1.5rem; }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 border-b border-slate-100 bg-white/95 backdrop-blur" id="main-header">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+      <a href="#" class="flex items-center gap-2">
+        <span class="flex h-10 w-10 items-center justify-center rounded-xl text-lg text-white shadow-lg" style="background:var(--brand-600)">
+          <i class="fa-solid fa-boxes-stacked"></i>
+        </span>
+        <span class="text-xl font-black tracking-tight" style="color:var(--brand-900)">
+          Vesco<span style="color:var(--brand-600)">plast</span>
+        </span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm font-bold text-slate-600">
+        <a href="#produtos" class="hover:text-green-700">Produtos</a>
+        <a href="#diferenciais" class="hover:text-green-700">Diferenciais</a>
+        <a href="#contato" class="hover:text-green-700">Contato</a>
+      </nav>
+      <a href="https://www.instagram.com/vescoplast/" target="_blank"
+        class="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-bold text-slate-700 transition hover:border-green-600 hover:text-green-700">
+        <i class="fa-brands fa-instagram text-base"></i>
+        <span class="hidden sm:inline">Instagram</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== HERO CAROUSEL ===== -->
+    <section class="hero-section" id="hero" style="min-height:600px;">
+
+      <!-- SLIDE 1: Sacos de Lixo -->
+      <div class="hero-slide active" id="slide-0">
+        <img src="https://cdn.abacus.ai/images/b00cc533-1465-411b-874b-98b6d8e33ba3.png" class="hero-slide-bg" alt="" />
+        <div class="hero-slide-overlay" style="background:linear-gradient(135deg,rgba(7,59,39,.92) 0%,rgba(8,124,71,.75) 100%)"></div>
+        <div class="hero-slide-content mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+          <div class="max-w-2xl">
+            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white">
+              <span class="h-2 w-2 animate-pulse rounded-full bg-lime-300"></span>
+              Sacos de Lixo — Atacado e Varejo
+            </div>
+            <h1 class="text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Sacos de Lixo para <span class="text-lime-300">toda operação</span>
+            </h1>
+            <p class="mt-5 max-w-xl text-lg leading-relaxed text-emerald-50">Coloridos, reforçados e para condomínio. Estoque sempre disponível para pronta entrega em São Paulo.</p>
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a href="#produtos" onclick="switchTab('lixo')" class="btn-primary"><i class="fa-solid fa-trash-can"></i> Ver Sacos de Lixo</a>
+              <a href="https://wa.me/5511990197135?text=Olá,%20quero%20cotar%20Sacos%20de%20Lixo." target="_blank" class="btn-ghost"><i class="fa-brands fa-whatsapp text-xl"></i> Cotar agora</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: Filme Stretch -->
+      <div class="hero-slide" id="slide-1">
+        <img src="https://cdn.abacus.ai/images/512b2b71-8d53-42aa-8d8b-92e8a78371b9.png" class="hero-slide-bg" alt="" />
+        <div class="hero-slide-overlay" style="background:linear-gradient(135deg,rgba(7,59,39,.88) 0%,rgba(2,30,60,.75) 100%)"></div>
+        <div class="hero-slide-content mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+          <div class="max-w-2xl">
+            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white">
+              <span class="h-2 w-2 animate-pulse rounded-full bg-blue-300"></span>
+              Filme Stretch — Industrial e Volante
+            </div>
+            <h1 class="text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Stretch que <span class="text-blue-300">protege sua carga</span>
+            </h1>
+            <p class="mt-5 max-w-xl text-lg leading-relaxed text-blue-50">Transparente e preto, em fardo industrial ou rolo volante. Alta elasticidade para paletização segura.</p>
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a href="#produtos" onclick="switchTab('stretch')" class="btn-primary"><i class="fa-solid fa-scroll"></i> Ver Filme Stretch</a>
+              <a href="https://wa.me/5511999999999?text=Olá,%20quero%20cotar%20Filme%20Stretch." target="_blank" class="btn-ghost"><i class="fa-brands fa-whatsapp text-xl"></i> Cotar agora</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3: Sacos PP/PE -->
+      <div class="hero-slide" id="slide-2">
+        <img src="https://cdn.abacus.ai/images/be76387d-9efc-45a6-8975-d91b87e47fd8.png" class="hero-slide-bg" alt="" />
+        <div class="hero-slide-overlay" style="background:linear-gradient(135deg,rgba(7,59,39,.9) 0%,rgba(30,58,138,.7) 100%)"></div>
+        <div class="hero-slide-content mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+          <div class="max-w-2xl">
+            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white">
+              <span class="h-2 w-2 animate-pulse rounded-full bg-sky-300"></span>
+              Sacos PP / PE — Por Kg
+            </div>
+            <h1 class="text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Sacos PP e PE <span class="text-sky-300">por kg</span>
+            </h1>
+            <p class="mt-5 max-w-xl text-lg leading-relaxed text-sky-50">Embalagens transparentes de alta clareza para alimentos, indústria e comércio. Diversas espessuras e tamanhos, vendidos por kg.</p>
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a href="#produtos" onclick="switchTab('pppe')" class="btn-primary"><i class="fa-solid fa-bag-shopping"></i> Ver Sacos PP/PE</a>
+              <a href="https://wa.me/5511999999999?text=Olá,%20quero%20cotar%20Sacos%20PP/PE." target="_blank" class="btn-ghost"><i class="fa-brands fa-whatsapp text-xl"></i> Cotar agora</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: Envelopes Correios -->
+      <div class="hero-slide" id="slide-3">
+        <img src="https://cdn.abacus.ai/images/a98d69fa-106a-4512-8ec0-ae19b27a1824.png" class="hero-slide-bg" alt="" />
+        <div class="hero-slide-overlay" style="background:linear-gradient(135deg,rgba(7,59,39,.9) 0%,rgba(30,27,75,.75) 100%)"></div>
+        <div class="hero-slide-content mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+          <div class="max-w-2xl">
+            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white">
+              <span class="h-2 w-2 animate-pulse rounded-full bg-violet-300"></span>
+              Envelopes de Segurança — Correios
+            </div>
+            <h1 class="text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Envelopes <span class="text-violet-300">invioláveis</span> para envios
+            </h1>
+            <p class="mt-5 max-w-xl text-lg leading-relaxed text-violet-50">Lacre adesivo de segurança para Correios e transportadoras. 5 tamanhos, vendidos por milheiro.</p>
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a href="#produtos" onclick="switchTab('correios')" class="btn-primary"><i class="fa-solid fa-envelope"></i> Ver Envelopes</a>
+              <a href="https://wa.me/5511999999999?text=Olá,%20quero%20cotar%20Envelopes%20de%20Segurança." target="_blank" class="btn-ghost"><i class="fa-brands fa-whatsapp text-xl"></i> Cotar agora</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 5: Outros (Fitas, Bolha, Sacolas) -->
+      <div class="hero-slide" id="slide-4">
+        <img src="https://cdn.abacus.ai/images/1382e1dc-8c08-4b24-9d99-34176f20eff0.png" class="hero-slide-bg" alt="" />
+        <div class="hero-slide-overlay" style="background:linear-gradient(135deg,rgba(7,59,39,.9) 0%,rgba(120,53,15,.7) 100%)"></div>
+        <div class="hero-slide-content mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+          <div class="max-w-2xl">
+            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white">
+              <span class="h-2 w-2 animate-pulse rounded-full bg-amber-300"></span>
+              Fitas, Bolha, Sacolas e mais
+            </div>
+            <h1 class="text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Linha completa de <span class="text-amber-300">embalagens</span>
+            </h1>
+            <p class="mt-5 max-w-xl text-lg leading-relaxed text-amber-50">Plástico bolha, fitas adesivas e sacolas com alça. Tudo que sua operação precisa em um só lugar.</p>
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a href="#produtos" onclick="switchTab('outros')" class="btn-primary"><i class="fa-solid fa-box-open"></i> Ver Outros Produtos</a>
+              <a href="https://wa.me/5511999999999?text=Olá,%20quero%20conhecer%20os%20produtos%20da%20Vescoplast." target="_blank" class="btn-ghost"><i class="fa-brands fa-whatsapp text-xl"></i> Cotar agora</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dots de navegação -->
+      <div class="hero-dots">
+        <button class="hero-dot active" onclick="goToSlide(0)"></button>
+        <button class="hero-dot" onclick="goToSlide(1)"></button>
+        <button class="hero-dot" onclick="goToSlide(2)"></button>
+        <button class="hero-dot" onclick="goToSlide(3)"></button>
+        <button class="hero-dot" onclick="goToSlide(4)"></button>
+      </div>
+
+      <!-- Barra de progresso -->
+      <div class="hero-progress" id="hero-progress"></div>
+
+      <!-- Selos flutuantes -->
+      <div class="absolute bottom-12 right-5 z-10 hidden lg:flex flex-col gap-3">
+        <div class="flex items-center gap-3 rounded-2xl bg-lime-300 px-4 py-3 shadow-xl">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-white" style="background:var(--brand-900)"><i class="fa-solid fa-truck"></i></span>
+          <p class="text-sm font-black leading-tight" style="color:var(--brand-900)">Frete Grátis<br>para toda SP</p>
+        </div>
+        <div class="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-xl">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-white" style="background:var(--brand-600)"><i class="fa-solid fa-tags"></i></span>
+          <p class="text-sm font-black leading-tight text-slate-900">Preços Direto<br>de Fábrica</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <section class="border-b border-slate-200 bg-white">
+      <div class="mx-auto grid max-w-7xl gap-6 px-5 py-7 text-center sm:grid-cols-3 lg:px-8">
+        <div class="flex items-center justify-center gap-3"><i class="fa-solid fa-bolt text-xl" style="color:var(--brand-600)"></i><span class="text-sm font-bold text-slate-700">Cotação rápida pelo WhatsApp</span></div>
+        <div class="flex items-center justify-center gap-3"><i class="fa-solid fa-warehouse text-xl" style="color:var(--brand-600)"></i><span class="text-sm font-bold text-slate-700">Estoque para pronta entrega</span></div>
+        <div class="flex items-center justify-center gap-3"><i class="fa-solid fa-shield-halved text-xl" style="color:var(--brand-600)"></i><span class="text-sm font-bold text-slate-700">Qualidade para sua operação</span></div>
+      </div>
+    </section>
+
+    <!-- Produtos com Tabs -->
+    <section id="produtos" class="mx-auto max-w-7xl px-5 py-16 sm:py-20 lg:px-8">
+      <div class="mx-auto max-w-2xl text-center">
+        <span class="text-sm font-extrabold uppercase tracking-widest" style="color:var(--brand-600)">Linha completa</span>
+        <h2 class="mt-3 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">O plástico certo para cada etapa do seu negócio.</h2>
+        <p class="mt-4 text-slate-600">Escolha a categoria e clique para cotar direto no WhatsApp.</p>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="mt-10 flex flex-wrap justify-center gap-3">
+        <button onclick="switchTab('lixo')" id="tab-lixo" class="tab-btn active rounded-full px-5 py-2.5 text-sm font-bold border border-slate-200 bg-white text-slate-700">
+          <i class="fa-solid fa-trash-can mr-1"></i> Sacos de Lixo
+        </button>
+        <button onclick="switchTab('stretch')" id="tab-stretch" class="tab-btn rounded-full px-5 py-2.5 text-sm font-bold border border-slate-200 bg-white text-slate-700">
+          <i class="fa-solid fa-scroll mr-1"></i> Filme Stretch
+        </button>
+        <button onclick="switchTab('pppe')" id="tab-pppe" class="tab-btn rounded-full px-5 py-2.5 text-sm font-bold border border-slate-200 bg-white text-slate-700">
+          <i class="fa-solid fa-bag-shopping mr-1"></i> Sacos PP / PE
+        </button>
+        <button onclick="switchTab('correios')" id="tab-correios" class="tab-btn rounded-full px-5 py-2.5 text-sm font-bold border border-slate-200 bg-white text-slate-700">
+          <i class="fa-solid fa-envelope mr-1"></i> Envelopes Correios
+        </button>
+        <button onclick="switchTab('outros')" id="tab-outros" class="tab-btn rounded-full px-5 py-2.5 text-sm font-bold border border-slate-200 bg-white text-slate-700">
+          <i class="fa-solid fa-box-open mr-1"></i> Outros
+        </button>
+      </div>
+
+      <!-- ==== TAB: SACOS DE LIXO ==== -->
+      <div id="content-lixo" class="tab-content active mt-10">
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- Coloridos -->
+          <article class="product-card flex flex-col rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+            <div class="color-slideshow h-44 bg-slate-100">
+              <div class="color-track h-full items-center flex px-3 py-3">
+                <img src="https://cdn.abacus.ai/images/ca48b51d-3cf7-4540-b141-35e2fffb5d61.png" class="color-slide-img" alt="Sacos coloridos coleta seletiva" />
+                <img src="https://cdn.abacus.ai/images/ca48b51d-3cf7-4540-b141-35e2fffb5d61.png" class="color-slide-img" alt="Sacos coloridos coleta seletiva" />
+                <img src="https://cdn.abacus.ai/images/ca48b51d-3cf7-4540-b141-35e2fffb5d61.png" class="color-slide-img" alt="Sacos coloridos coleta seletiva" />
+                <img src="https://cdn.abacus.ai/images/ca48b51d-3cf7-4540-b141-35e2fffb5d61.png" class="color-slide-img" alt="Sacos coloridos coleta seletiva" />
+                <img src="https://cdn.abacus.ai/images/ca48b51d-3cf7-4540-b141-35e2fffb5d61.png" class="color-slide-img" alt="Sacos coloridos coleta seletiva" />
+                <img src="https://cdn.abacus.ai/images/ca48b51d-3cf7-4540-b141-35e2fffb5d61.png" class="color-slide-img" alt="Sacos coloridos coleta seletiva" />
+              </div>
+            </div>
+            <div class="flex flex-col flex-1 p-5">
+              <span class="inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-700 w-fit">Coleta Seletiva</span>
+              <h3 class="mt-3 text-lg font-black text-slate-900">Sacos de Lixo Coloridos</h3>
+              <p class="mt-2 text-sm leading-relaxed text-slate-600 flex-1">Ideal para coleta seletiva e identificação de resíduos por categoria. Azul, verde, amarelo, vermelho, laranja e branco.</p>
+              <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20uma%20cotação%20para%20Sacos%20de%20Lixo%20Coloridos." target="_blank" class="btn-whatsapp mt-5">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Cotar agora
+              </a>
+            </div>
+          </article>
+          <!-- Reforçado -->
+          <article class="product-card flex flex-col rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+            <div class="h-44 overflow-hidden">
+              <img src="https://cdn.abacus.ai/images/b00cc533-1465-411b-874b-98b6d8e33ba3.png" alt="Saco de lixo reforçado" class="w-full h-full object-cover" />
+            </div>
+            <div class="flex flex-col flex-1 p-5">
+              <span class="inline-block rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700 w-fit">Reforçado</span>
+              <h3 class="mt-3 text-lg font-black text-slate-900">Sacos de Lixo Reforçado</h3>
+              <p class="mt-2 text-sm leading-relaxed text-slate-600 flex-1">Alta resistência para resíduos pesados, entulho e uso industrial. Não rasga, não vaza.</p>
+              <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20uma%20cotação%20para%20Sacos%20de%20Lixo%20Reforçado." target="_blank" class="btn-whatsapp mt-5">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Cotar agora
+              </a>
+            </div>
+          </article>
+          <!-- Condomínio -->
+          <article class="product-card flex flex-col rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+            <div class="h-44 overflow-hidden">
+              <img src="https://cdn.abacus.ai/images/b175a280-b488-4b32-8e3a-26f2edf10d9c.png" alt="Sacos para condomínio" class="w-full h-full object-cover" />
+            </div>
+            <div class="flex flex-col flex-1 p-5">
+              <span class="inline-block rounded-full bg-purple-100 px-3 py-1 text-xs font-bold text-purple-700 w-fit">Atacado</span>
+              <h3 class="mt-3 text-lg font-black text-slate-900">Sacos para Condomínio</h3>
+              <p class="mt-2 text-sm leading-relaxed text-slate-600 flex-1">Fornecimento em grandes volumes para condomínios e gestoras prediais. Fim do problema de lixo espalhado.</p>
+              <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20uma%20cotação%20para%20Sacos%20para%20Condomínio." target="_blank" class="btn-whatsapp mt-5">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Cotar agora
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- ==== TAB: FILME STRETCH ==== -->
+      <div id="content-stretch" class="tab-content mt-10">
+        <!-- Banners reais -->
+        <div class="grid gap-4 sm:grid-cols-2 mb-8">
+          <img src="https://cdn.abacus.ai/images/512b2b71-8d53-42aa-8d8b-92e8a78371b9.png" alt="Palete Vescoplast com stretch film" class="stretch-banner" />
+          <img src="https://cdn.abacus.ai/images/1382e1dc-8c08-4b24-9d99-34176f20eff0.png" alt="Aplicação de fita adesiva em caixa" class="stretch-banner" />
+        </div>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <!-- Stretch Transparente Fardo -->
+          <article class="product-card flex flex-col rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+            <div class="h-44 overflow-hidden">
+              <img src="https://cdn.abacus.ai/images/bff9d5ff-8bbb-419d-8e31-750cccb94c3a.png" alt="Bobina stretch transparente sendo esticada" class="w-full h-full object-cover" />
+            </div>
+            <div class="flex flex-col flex-1 p-5">
+              <span class="inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700 w-fit">Fardo</span>
+              <h3 class="mt-3 text-lg font-black text-slate-900">Stretch Transparente</h3>
+              <p class="mt-2 text-sm text-slate-600 flex-1">Bobina industrial para paletização. Alta transparência e resistência ao rasgo.</p>
+              <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20uma%20cotação%20para%20Stretch%20Transparente%20Fardo." target="_blank" class="btn-whatsapp mt-5">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Cotar agora
+              </a>
+            </div>
+          </article>
+          <!-- Stretch Preto Fardo -->
+          <article class="product-card flex flex-col rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+            <div class="h-44 overflow-hidden">
+              <img src="https://cdn.abacus.ai/images/a5affb85-df0f-4ce7-8550-4709ed566f8d.png" alt="Bobina stretch preta" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x176/1e293b/fff?text=Stretch+Preto'" />
+            </div>
+            <div class="flex flex-col flex-1 p-5">
+              <span class="inline-block rounded-full bg-slate-800 px-3 py-1 text-xs font-bold text-white w-fit">Fardo Preto</span>
+              <h3 class="mt-3 text-lg font-black text-slate-900">Stretch Preto</h3>
+              <p class="mt-2 text-sm text-slate-600 flex-1">Ideal para ocultar conteúdo da carga. Proteção e privacidade no transporte.</p>
+              <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20uma%20cotação%20para%20Stretch%20Preto%20Fardo." target="_blank" class="btn-whatsapp mt-5">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Cotar agora
+              </a>
+            </div>
+          </article>
+          <!-- Stretch Volante — FOTO REAL DO ROLINHO -->
+          <article class="product-card flex flex-col rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+            <div class="h-44 overflow-hidden bg-white flex items-center justify-center">
+              <img src="https://cdn.abacus.ai/images/e4f0488e-9846-4af1-8329-87029253c1de.png" alt="Stretch volante rolo manual com cabo" class="h-full w-full object-contain p-2" />
+            </div>
+            <div class="flex flex-col flex-1 p-5">
+              <span class="inline-block rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-700 w-fit">Volante</span>
+              <h3 class="mt-3 text-lg font-black text-slate-900">Stretch Volante</h3>
+              <p class="mt-2 text-sm text-slate-600 flex-1">Rolo pequeno manual com cabo ergonômico. Ideal para uso rápido em embalagens e amarrações.</p>
+              <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20uma%20cotação%20para%20Stretch%20Volante." target="_blank" class="btn-whatsapp mt-5">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Cotar agora
+              </a>
+            </div>
+          </article>
+          <!-- Stretch Atacado -->
+          <article class="product-card flex flex-col rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+            <div class="h-44 overflow-hidden">
+              <img src="https://cdn.abacus.ai/images/2ff05089-feec-4e29-8254-4dae4d180057.png" alt="Palete Vescoplast embalado com stretch em atacado" class="w-full h-full object-cover" />
+            </div>
+            <div class="flex flex-col flex-1 p-5">
+              <span class="inline-block rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700 w-fit">Atacado</span>
+              <h3 class="mt-3 text-lg font-black text-slate-900">Stretch em Quantidade</h3>
+              <p class="mt-2 text-sm text-slate-600 flex-1">Compra em volume com preço de fábrica. Ideal para distribuidoras e galpões.</p>
+              <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20uma%20cotação%20para%20Stretch%20em%20Atacado." target="_blank" class="btn-whatsapp mt-5">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Cotar agora
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- ==== TAB: SACOS PP / PE ==== -->
+      <div id="content-pppe" class="tab-content mt-10">
+        <div class="grid gap-8 lg:grid-cols-2">
+          <div>
+            <!-- Duas fotos reais dos sacos PP/PE -->
+            <div class="grid grid-cols-2 gap-3 mb-6">
+              <img src="https://cdn.abacus.ai/images/f6d05361-bdf3-4f58-9411-a12e9afd3ebd.png" alt="Saco PP com produto" class="w-full h-44 object-cover rounded-2xl shadow" />
+              <img src="https://cdn.abacus.ai/images/ae147b82-bb66-4ada-9ff8-9486629c2662.png" alt="Sacos PP transparentes com café" class="w-full h-44 object-cover rounded-2xl shadow" />
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <h3 class="text-xl font-black text-slate-900 mb-1">Sacos Plásticos PP e PE</h3>
+              <p class="text-sm text-slate-600 mb-4">Embalagens transparentes de alta clareza para produtos alimentícios, industriais e comerciais. Disponíveis em diversas espessuras e tamanhos, vendidos por milheiro.</p>
+              <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20uma%20cotação%20para%20Sacos%20PP/PE." target="_blank" class="btn-whatsapp inline-flex">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Solicitar cotação
+              </a>
+            </div>
+          </div>
+          <div class="space-y-6">
+            <!-- Tabela PP com quantidade por milheiro -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm overflow-x-auto">
+              <h4 class="font-black text-slate-900 mb-3 flex items-center gap-2"><i class="fa-solid fa-table" style="color:var(--brand-600)"></i> Tabela PP — Qtd por Kg e Kg por Milheiro</h4>
+              <table>
+                <thead>
+                  <tr>
+                    <th rowspan="2">Medida</th>
+                    <th colspan="3">Quantidade por Kg</th>
+                    <th colspan="3">Kg por Milheiro</th>
+                  </tr>
+                  <tr>
+                    <th>0,06mm</th>
+                    <th>0,08mm</th>
+                    <th>0,10mm</th>
+                    <th>0,06mm</th>
+                    <th>0,08mm</th>
+                    <th>0,10mm</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>6×11</strong></td><td>2.650</td><td>1.985</td><td>1.590</td><td>1,0</td><td>1,0</td><td>1,0</td></tr>
+                  <tr><td><strong>7×11</strong></td><td>2.720</td><td>1.700</td><td>1.360</td><td>1,0</td><td>1,0</td><td>1,0</td></tr>
+                  <tr><td><strong>8×11</strong></td><td>1.985</td><td>1.490</td><td>1.190</td><td>1,0</td><td>1,0</td><td>1,0</td></tr>
+                  <tr><td><strong>10×15</strong></td><td>1.165</td><td>875</td><td>700</td><td>1,0</td><td>2,0</td><td>2,0</td></tr>
+                  <tr><td><strong>13×18</strong></td><td>745</td><td>560</td><td>445</td><td>2,0</td><td>2,0</td><td>3,0</td></tr>
+                  <tr><td><strong>15×20</strong></td><td>580</td><td>435</td><td>350</td><td>2,0</td><td>3,0</td><td>3,0</td></tr>
+                  <tr><td><strong>18×25</strong></td><td>385</td><td>290</td><td>230</td><td>3,0</td><td>5,0</td><td>5,0</td></tr>
+                  <tr><td><strong>20×30</strong></td><td>290</td><td>215</td><td>175</td><td>4,0</td><td>5,0</td><td>6,0</td></tr>
+                  <tr><td><strong>22×32</strong></td><td>245</td><td>185</td><td>145</td><td>5,0</td><td>6,0</td><td>7,0</td></tr>
+                  <tr><td><strong>25×35</strong></td><td>200</td><td>150</td><td>120</td><td>5,0</td><td>7,0</td><td>9,0</td></tr>
+                  <tr><td><strong>28×40</strong></td><td>155</td><td>115</td><td>90</td><td>6,0</td><td>10,0</td><td>12,0</td></tr>
+                  <tr><td><strong>30×40</strong></td><td>145</td><td>105</td><td>85</td><td>7,0</td><td>10,0</td><td>12,0</td></tr>
+                  <tr><td><strong>35×45</strong></td><td>110</td><td>80</td><td>65</td><td>10,0</td><td>13,0</td><td>16,0</td></tr>
+                  <tr><td><strong>40×60</strong></td><td>70</td><td>50</td><td>40</td><td>15,0</td><td>20,0</td><td>25,0</td></tr>
+                  <tr><td><strong>50×70</strong></td><td>50</td><td>35</td><td>30</td><td>20,0</td><td>30,0</td><td>35,0</td></tr>
+                </tbody>
+              </table>
+              <p class="text-xs text-slate-400 mt-2">* Dados baseados na tabela oficial. Consulte preços e disponibilidade pelo WhatsApp.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm overflow-x-auto">
+              <h4 class="font-black text-slate-900 mb-3 flex items-center gap-2"><i class="fa-solid fa-table" style="color:var(--brand-600)"></i> Tabela PE — Por Código / Milheiro</h4>
+              <table>
+                <thead><tr><th>Código</th><th>Tamanho (cm)</th><th>Espessura</th><th>Qtd/Milheiro</th><th>Preço</th></tr></thead>
+                <tbody>
+                  <tr><td>PE-01</td><td>5 × 8</td><td>0,06mm</td><td>5.000</td><td>—</td></tr>
+                  <tr><td>PE-02</td><td>10 × 15</td><td>0,08mm</td><td>2.000</td><td>—</td></tr>
+                  <tr><td>PE-03</td><td>15 × 20</td><td>0,10mm</td><td>1.000</td><td>—</td></tr>
+                  <tr><td>PE-04</td><td>20 × 30</td><td>0,10mm</td><td>1.000</td><td>—</td></tr>
+                  <tr><td>PE-05</td><td>30 × 40</td><td>0,12mm</td><td>500</td><td>—</td></tr>
+                  <tr><td>PE-06</td><td>40 × 60</td><td>0,12mm</td><td>250</td><td>—</td></tr>
+                </tbody>
+              </table>
+              <p class="text-xs text-slate-400 mt-2">* Consulte disponibilidade e preços pelo WhatsApp.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==== TAB: ENVELOPES CORREIOS ==== -->
+      <div id="content-correios" class="tab-content mt-10">
+        <div class="grid gap-8 lg:grid-cols-3">
+          <div class="lg:col-span-1">
+            <img src="https://cdn.abacus.ai/images/a98d69fa-106a-4512-8ec0-ae19b27a1824.png" alt="Envelope de segurança sendo aberto" class="w-full h-56 object-cover rounded-2xl shadow mb-4" />
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 class="text-lg font-black text-slate-900 mb-2">Envelopes de Segurança</h3>
+              <p class="text-sm text-slate-600 mb-4">Envelopes plásticos com lacre adesivo inviolável para envios pelos Correios e transportadoras. Disponíveis em 5 tamanhos, vendidos por milheiro.</p>
+              <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20uma%20cotação%20para%20Envelopes%20de%20Segurança." target="_blank" class="btn-whatsapp inline-flex w-full justify-center">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Cotar por milheiro
+              </a>
+            </div>
+          </div>
+          <div class="lg:col-span-2 space-y-4">
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm text-center">
+                <div class="flex h-12 w-12 mx-auto items-center justify-center rounded-xl mb-3" style="background:var(--brand-50)"><i class="fa-solid fa-envelope text-xl" style="color:var(--brand-600)"></i></div>
+                <p class="font-black text-slate-900">19 × 25 cm</p>
+                <p class="text-xs text-slate-500 mt-1">Pequeno — joias, documentos</p>
+                <a href="https://wa.me/5511999999999?text=Olá,%20quero%20cotar%20Envelope%2019x25." target="_blank" class="btn-whatsapp mt-3 text-xs py-2 px-3 inline-flex"><i class="fa-brands fa-whatsapp"></i> Cotar</a>
+              </div>
+              <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm text-center">
+                <div class="flex h-12 w-12 mx-auto items-center justify-center rounded-xl mb-3" style="background:var(--brand-50)"><i class="fa-solid fa-envelope text-xl" style="color:var(--brand-600)"></i></div>
+                <p class="font-black text-slate-900">20 × 30 cm</p>
+                <p class="text-xs text-slate-500 mt-1">Médio — roupas, acessórios</p>
+                <a href="https://wa.me/5511999999999?text=Olá,%20quero%20cotar%20Envelope%2020x30." target="_blank" class="btn-whatsapp mt-3 text-xs py-2 px-3 inline-flex"><i class="fa-brands fa-whatsapp"></i> Cotar</a>
+              </div>
+              <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm text-center">
+                <div class="flex h-12 w-12 mx-auto items-center justify-center rounded-xl mb-3" style="background:var(--brand-50)"><i class="fa-solid fa-envelope text-xl" style="color:var(--brand-600)"></i></div>
+                <p class="font-black text-slate-900">26 × 36 cm</p>
+                <p class="text-xs text-slate-500 mt-1">Médio-grande — calçados</p>
+                <a href="https://wa.me/5511999999999?text=Olá,%20quero%20cotar%20Envelope%2026x36." target="_blank" class="btn-whatsapp mt-3 text-xs py-2 px-3 inline-flex"><i class="fa-brands fa-whatsapp"></i> Cotar</a>
+              </div>
+              <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm text-center">
+                <div class="flex h-12 w-12 mx-auto items-center justify-center rounded-xl mb-3" style="background:var(--brand-50)"><i class="fa-solid fa-envelope text-xl" style="color:var(--brand-600)"></i></div>
+                <p class="font-black text-slate-900">32 × 40 cm</p>
+                <p class="text-xs text-slate-500 mt-1">Grande — roupas, livros</p>
+                <a href="https://wa.me/5511999999999?text=Olá,%20quero%20cotar%20Envelope%2032x40." target="_blank" class="btn-whatsapp mt-3 text-xs py-2 px-3 inline-flex"><i class="fa-brands fa-whatsapp"></i> Cotar</a>
+              </div>
+              <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm text-center">
+                <div class="flex h-12 w-12 mx-auto items-center justify-center rounded-xl mb-3" style="background:var(--brand-50)"><i class="fa-solid fa-envelope text-xl" style="color:var(--brand-600)"></i></div>
+                <p class="font-black text-slate-900">40 × 50 cm</p>
+                <p class="text-xs text-slate-500 mt-1">Extra-grande — volumosos</p>
+                <a href="https://wa.me/5511999999999?text=Olá,%20quero%20cotar%20Envelope%2040x50." target="_blank" class="btn-whatsapp mt-3 text-xs py-2 px-3 inline-flex"><i class="fa-brands fa-whatsapp"></i> Cotar</a>
+              </div>
+            </div>
+            <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm overflow-x-auto">
+              <h4 class="font-black text-slate-900 mb-3 flex items-center gap-2"><i class="fa-solid fa-table" style="color:var(--brand-600)"></i> Tabela de Preços por Milheiro</h4>
+              <table>
+                <thead><tr><th>Tamanho</th><th>Aplicação</th><th>Qtd/Milheiro</th><th>Preço/Milheiro</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>19 × 25 cm</strong></td><td>Joias, documentos</td><td>1.000 un</td><td>Consultar</td></tr>
+                  <tr><td><strong>20 × 30 cm</strong></td><td>Roupas, acessórios</td><td>1.000 un</td><td>Consultar</td></tr>
+                  <tr><td><strong>26 × 36 cm</strong></td><td>Calçados, eletrônicos</td><td>500 un</td><td>Consultar</td></tr>
+                  <tr><td><strong>32 × 40 cm</strong></td><td>Peças de roupa, livros</td><td>500 un</td><td>Consultar</td></tr>
+                  <tr><td><strong>40 × 50 cm</strong></td><td>Produtos volumosos</td><td>250 un</td><td>Consultar</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==== TAB: OUTROS ==== -->
+      <div id="content-outros" class="tab-content mt-10">
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- Plástico Bolha -->
+          <article class="product-card flex flex-col rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+            <div class="h-44 overflow-hidden">
+              <img src="https://cdn.abacus.ai/images/8a4b22f4-3b7d-4936-bd0f-6c8095c34572.png" alt="Plástico bolha rolo" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x176/e2e8f0/64748b?text=Plástico+Bolha'" />
+            </div>
+            <div class="flex flex-col flex-1 p-5">
+              <h3 class="text-lg font-black text-slate-900">Plástico Bolha</h3>
+              <p class="mt-2 text-sm text-slate-600 flex-1">Proteção reforçada para produtos frágeis durante armazenamento e transporte.</p>
+              <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20uma%20cotação%20para%20Plástico%20Bolha." target="_blank" class="btn-whatsapp mt-5">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Cotar agora
+              </a>
+            </div>
+          </article>
+          <!-- Fitas Adesivas -->
+          <article class="product-card flex flex-col rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+            <div class="h-44 overflow-hidden">
+              <img src="https://cdn.abacus.ai/images/fdb9467b-fce9-4cbe-bc55-b9f81dc451c8.png" alt="Fitas adesivas" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x176/fef3c7/92400e?text=Fitas+Adesivas'" />
+            </div>
+            <div class="flex flex-col flex-1 p-5">
+              <h3 class="text-lg font-black text-slate-900">Fitas Adesivas</h3>
+              <p class="mt-2 text-sm text-slate-600 flex-1">Transparente, marrom e metal. Tamanho padrão e 100 metros. Fechamento confiável para caixas e pacotes.</p>
+              <div class="mt-3 flex flex-wrap gap-1">
+                <span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-600">Transparente</span>
+                <span class="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-700">Marrom</span>
+                <span class="rounded-full bg-slate-200 px-2 py-0.5 text-xs font-bold text-slate-700">Metal</span>
+                <span class="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">100m</span>
+              </div>
+              <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20uma%20cotação%20para%20Fitas%20Adesivas." target="_blank" class="btn-whatsapp mt-4">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Cotar agora
+              </a>
+            </div>
+          </article>
+          <!-- Sacolas com Alça -->
+          <article class="product-card flex flex-col rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+            <div class="h-44 overflow-hidden">
+              <img src="https://cdn.abacus.ai/images/a40ce26d-8a78-4fdd-9d8d-e47afe6819b4.png" alt="Sacolas com alça" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x176/dcfce7/166534?text=Sacolas+com+Alça'" />
+            </div>
+            <div class="flex flex-col flex-1 p-5">
+              <h3 class="text-lg font-black text-slate-900">Sacolas com Alça 5kg</h3>
+              <p class="mt-2 text-sm text-slate-600 flex-1">Sacolas plásticas com alça para varejo. Capacidade 5kg. Disponíveis em branco, verde e preto.</p>
+              <div class="mt-3 flex flex-wrap gap-1">
+                <span class="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-600">Branca</span>
+                <span class="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700">Verde</span>
+                <span class="rounded-full bg-slate-800 px-2 py-0.5 text-xs font-bold text-white">Preta</span>
+              </div>
+              <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20uma%20cotação%20para%20Sacolas%20com%20Alça%205kg." target="_blank" class="btn-whatsapp mt-4">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Cotar agora
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Diferenciais -->
+    <section id="diferenciais" class="py-16 sm:py-20" style="background:var(--brand-900)">
+      <div class="mx-auto grid max-w-7xl gap-10 px-5 lg:grid-cols-2 lg:items-center lg:px-8">
+        <div>
+          <span class="text-sm font-extrabold uppercase tracking-widest text-lime-300">Por que Vescoplast?</span>
+          <h2 class="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl">Menos preocupação com estoque. Mais foco no crescimento.</h2>
+          <p class="mt-5 max-w-xl text-lg leading-relaxed text-emerald-100">Trabalhamos para que você tenha a embalagem certa no momento em que mais precisa.</p>
+          <a href="https://wa.me/5511999999999?text=Olá,%20quero%20conhecer%20as%20soluções%20da%20Vescoplast." target="_blank"
+            class="mt-8 inline-flex items-center gap-2 rounded-xl bg-lime-300 px-6 py-4 font-extrabold transition hover:-translate-y-0.5 hover:bg-lime-200" style="color:var(--brand-900)">
+            Falar com um especialista <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="rounded-2xl border border-white/10 bg-white/10 p-6 backdrop-blur">
+            <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-lime-300 text-xl" style="color:var(--brand-900)"><i class="fa-solid fa-motorcycle"></i></span>
+            <h3 class="mt-5 text-xl font-black text-white">Agilidade na capital</h3>
+            <p class="mt-2 text-sm leading-relaxed text-emerald-100">Operação preparada para atender São Paulo com rapidez e eficiência logística.</p>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-white/10 p-6 backdrop-blur">
+            <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-lime-300 text-xl" style="color:var(--brand-900)"><i class="fa-solid fa-dumbbell"></i></span>
+            <h3 class="mt-5 text-xl font-black text-white">Materiais resistentes</h3>
+            <p class="mt-2 text-sm leading-relaxed text-emerald-100">Produtos desenvolvidos para suportar a rotina intensa de armazenamento e envio.</p>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-white/10 p-6 backdrop-blur sm:col-span-2">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-lime-300 text-xl" style="color:var(--brand-900)"><i class="fa-solid fa-handshake"></i></span>
+              <div>
+                <h3 class="text-xl font-black text-white">Parceria para a sua operação</h3>
+                <p class="mt-1 text-sm leading-relaxed text-emerald-100">Do pequeno varejo à grande demanda, ajudamos você a comprar melhor.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Instagram -->
+    <section class="mx-auto max-w-7xl px-5 py-16 sm:py-20 lg:px-8">
+      <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <div class="max-w-2xl">
+          <span class="text-sm font-extrabold uppercase tracking-widest" style="color:var(--brand-600)">Bastidores da Vescoplast</span>
+          <h2 class="mt-3 text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">Acompanhe nosso dia a dia na operação.</h2>
+        </div>
+        <a href="https://www.instagram.com/vescoplast/" target="_blank"
+          class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-3 font-extrabold text-white transition hover:bg-green-800">
+          <i class="fa-brands fa-instagram text-lg"></i> Siga @Vescoplast
+        </a>
+      </div>
+      <div class="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <div class="aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800 to-slate-600 p-5 text-white shadow-lg cursor-pointer hover:scale-105 transition-transform">
+          <div class="flex h-full flex-col justify-between">
+            <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 text-xl"><i class="fa-solid fa-boxes-stacked"></i></span>
+            <div><p class="font-black">Estoque organizado</p><p class="mt-1 text-xs text-slate-200">Pronto para atender.</p></div>
+          </div>
+        </div>
+        <div class="aspect-square overflow-hidden rounded-2xl p-5 text-white shadow-lg cursor-pointer hover:scale-105 transition-transform" style="background:linear-gradient(135deg,var(--brand-700),var(--brand-500))">
+          <div class="flex h-full flex-col justify-between">
+            <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 text-xl"><i class="fa-solid fa-truck-ramp-box"></i></span>
+            <div><p class="font-black">Pedidos saindo</p><p class="mt-1 text-xs text-emerald-100">Operação em movimento.</p></div>
+          </div>
+        </div>
+        <div class="aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 p-5 text-white shadow-lg cursor-pointer hover:scale-105 transition-transform">
+          <div class="flex h-full flex-col justify-between">
+            <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 text-xl"><i class="fa-solid fa-tape"></i></span>
+            <div><p class="font-black">Materiais de qualidade</p><p class="mt-1 text-xs text-amber-100">Para proteger seu produto.</p></div>
+          </div>
+        </div>
+        <div class="aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-sky-600 to-blue-800 p-5 text-white shadow-lg cursor-pointer hover:scale-105 transition-transform">
+          <div class="flex h-full flex-col justify-between">
+            <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 text-xl"><i class="fa-solid fa-people-carry-box"></i></span>
+            <div><p class="font-black">Time em ação</p><p class="mt-1 text-xs text-sky-100">Atendimento que resolve.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section id="contato" class="px-5 pb-16 lg:px-8">
+      <div class="mx-auto max-w-7xl overflow-hidden rounded-3xl bg-lime-300 px-6 py-10 sm:px-10 sm:py-12">
+        <div class="grid gap-7 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <p class="text-sm font-extrabold uppercase tracking-widest" style="color:var(--brand-700)">Não deixe faltar embalagem</p>
+            <h2 class="mt-2 text-3xl font-black tracking-tight sm:text-4xl" style="color:var(--brand-900)">Peça sua cotação e abasteça sua operação hoje.</h2>
+            <p class="mt-3" style="color:var(--brand-900);opacity:.8">Atendimento rápido e personalizado para atacado e varejo.</p>
+          </div>
+          <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20solicitar%20uma%20cotação." target="_blank"
+            class="inline-flex items-center justify-center gap-3 rounded-xl px-7 py-4 font-extrabold text-white shadow-lg transition hover:-translate-y-0.5" style="background:var(--brand-900)">
+            <i class="fa-brands fa-whatsapp text-2xl"></i> Solicitar cotação no WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-950 text-slate-300">
+    <div class="mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+      <div class="lg:col-span-2">
+        <a href="#" class="inline-flex items-center gap-2">
+          <span class="flex h-10 w-10 items-center justify-center rounded-xl text-lg text-white" style="background:var(--brand-600)"><i class="fa-solid fa-boxes-stacked"></i></span>
+          <span class="text-xl font-black tracking-tight text-white">Vesco<span class="text-lime-300">plast</span></span>
+        </a>
+        <p class="mt-4 max-w-md text-sm leading-relaxed text-slate-400">Soluções em plásticos e embalagens para manter seu negócio protegido, organizado e sempre em movimento.</p>
+      </div>
+      <div>
+        <h3 class="font-black text-white">Contato</h3>
+        <ul class="mt-4 space-y-3 text-sm text-slate-400">
+          <li class="flex gap-3"><i class="fa-brands fa-whatsapp mt-0.5" style="color:var(--brand-500)"></i> (11) 99019-7135</li>
+          <li class="flex gap-3"><i class="fa-solid fa-envelope mt-0.5" style="color:var(--brand-500)"></i> contato@vescoplast.com.br</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-black text-white">Localização</h3>
+        <ul class="mt-4 space-y-3 text-sm text-slate-400">
+          <li class="flex gap-3"><i class="fa-solid fa-location-dot mt-0.5" style="color:var(--brand-500)"></i> São Paulo - SP</li>
+          <li class="flex gap-3"><i class="fa-solid fa-id-card mt-0.5" style="color:var(--brand-500)"></i> CNPJ: 00.000.000/0001-00</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10">
+      <div class="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-5 text-center text-xs text-slate-500 sm:flex-row sm:justify-between lg:px-8">
+        <p>© <span id="currentYear"></span> Vescoplast. Todos os direitos reservados.</p>
+        <p>Embalagens para atacado e varejo.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Flutuante -->
+  <a href="https://wa.me/5511999999999?text=Olá,%20gostaria%20de%20uma%20cotação%20da%20Vescoplast." target="_blank" id="whatsapp-float" aria-label="WhatsApp Vescoplast">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <script>
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    // ===== HERO CAROUSEL =====
+    let currentSlide = 0;
+    const totalSlides = 5;
+    let carouselTimer;
+
+    function goToSlide(n) {
+      document.querySelectorAll('.hero-slide').forEach((s, i) => {
+        s.classList.toggle('active', i === n);
+      });
+      document.querySelectorAll('.hero-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === n);
+      });
+      currentSlide = n;
+      // Reinicia barra de progresso
+      const bar = document.getElementById('hero-progress');
+      bar.style.animation = 'none';
+      bar.offsetHeight; // reflow
+      bar.style.animation = 'progressBar 4.5s linear infinite';
+    }
+
+    function nextSlide() {
+      goToSlide((currentSlide + 1) % totalSlides);
+    }
+
+    function startCarousel() {
+      carouselTimer = setInterval(nextSlide, 4500);
+    }
+
+    // Pausa ao hover
+    document.getElementById('hero').addEventListener('mouseenter', () => clearInterval(carouselTimer));
+    document.getElementById('hero').addEventListener('mouseleave', startCarousel);
+
+    startCarousel();
+
+    // ===== TABS =====
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('content-' + tab).classList.add('active');
+      // Scroll suave para a seção
+      setTimeout(() => {
+        document.getElementById('produtos').scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+
+    // Scroll suave links
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', function(e) {
+        const t = document.querySelector(this.getAttribute('href'));
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
+
+    // Header sombra
+    const header = document.getElementById('main-header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('shadow-md', window.scrollY > 10);
+    });
+
+    // Pulse WA
+    const floatBtn = document.getElementById('whatsapp-float');
+    setInterval(() => {
+      floatBtn.style.transform = 'scale(1.2)';
+      setTimeout(() => floatBtn.style.transform = 'scale(1)', 300);
+    }, 8000);
+
+    // Fade in cards
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.product-card').forEach(el => { el.classList.add('fade-in-up'); obs.observe(el); });
+  </script>
+</body>
+</html>
+
+
+me de esse atualizado, com os banner um pouco mais visivel e o numero de contato onde tiver o link para o whtsa

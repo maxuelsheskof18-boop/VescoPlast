@@ -1,0 +1,161 @@
+/* =============================================
+   VESCOPLAST — style.css
+   ============================================= */
+
+/* Scroll suave global */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Variáveis de cor da marca ── */
+:root {
+  --brand-50:  #effcf6;
+  --brand-100: #d9f8e7;
+  --brand-500: #0d9b58;
+  --brand-600: #087c47;
+  --brand-700: #06633a;
+  --brand-900: #073b27;
+}
+
+/* ── Hero gradient ── */
+.hero-pattern {
+  background-image:
+    radial-gradient(circle at 8% 20%, rgba(255,255,255,.13) 0, rgba(255,255,255,0) 30%),
+    radial-gradient(circle at 85% 15%, rgba(255,255,255,.10) 0, rgba(255,255,255,0) 26%),
+    linear-gradient(135deg, #073b27 0%, #087c47 52%, #0d9b58 100%);
+}
+
+/* ── Botões reutilizáveis ── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background-color: #fff;
+  color: var(--brand-700);
+  font-weight: 800;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+  transition: transform 0.2s, background-color 0.2s;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  background-color: #ecfdf5;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border: 1px solid rgba(255,255,255,.3);
+  background-color: rgba(255,255,255,.1);
+  color: #fff;
+  font-weight: 800;
+  border-radius: 0.75rem;
+  transition: transform 0.2s, background-color 0.2s;
+}
+.btn-ghost:hover {
+  transform: translateY(-2px);
+  background-color: rgba(255,255,255,.2);
+}
+
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #25D366;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 800;
+  border-radius: 0.75rem;
+  transition: background-color 0.2s, transform 0.2s;
+}
+.btn-whatsapp:hover {
+  background-color: #1daf57;
+  transform: translateY(-1px);
+}
+
+/* ── Cards de produto ── */
+.product-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 50px rgba(8, 124, 71, 0.12);
+  border-color: #d9f8e7;
+}
+.product-card:hover .product-icon {
+  transform: translateY(-7px) rotate(-4deg);
+}
+.product-icon {
+  transition: transform 0.3s ease;
+}
+
+/* ── Cards de diferenciais ── */
+.diferencial-card {
+  transition: background-color 0.3s ease;
+}
+.diferencial-card:hover {
+  background-color: rgba(255,255,255,.15);
+}
+
+/* ── Cards do Instagram ── */
+.insta-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+.insta-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 20px 40px rgba(0,0,0,.2);
+}
+
+/* ── Botão flutuante WhatsApp ── */
+#whatsapp-float {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  background-color: #25D366;
+  color: #fff;
+  font-size: 1.875rem;
+  border-radius: 9999px;
+  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.45);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+#whatsapp-float:hover {
+  transform: scale(1.12);
+  background-color: #1daf57;
+}
+
+/* ── Responsivo: ajuste do botão flutuante em telas maiores ── */
+@media (min-width: 640px) {
+  #whatsapp-float {
+    bottom: 1.75rem;
+    right: 1.75rem;
+  }
+}
+
+/* ── Utilitários de cor da marca (para uso sem Tailwind config) ── */
+.text-brand-600 { color: var(--brand-600); }
+.text-brand-700 { color: var(--brand-700); }
+.text-brand-900 { color: var(--brand-900); }
+.bg-brand-600   { background-color: var(--brand-600); }
+.bg-brand-700   { background-color: var(--brand-700); }
+.bg-brand-900   { background-color: var(--brand-900); }
+.border-brand-100 { border-color: var(--brand-100); }
+.border-brand-200 { border-color: #b3f0d4; }
+.hover\:bg-brand-50:hover  { background-color: var(--brand-50); }
+.hover\:bg-brand-700:hover { background-color: var(--brand-700); }
+.hover\:border-brand-600:hover { border-color: var(--brand-600); }
+.hover\:text-brand-700:hover   { color: var(--brand-700); }
+.bg-brand-500 { background-color: var(--brand-500); }
