@@ -186,7 +186,8 @@ a {
 }
 
 .hero-slide-bg {
-  filter: brightness(0.65);
+  /* Banner mais visível: imagem clara, mantendo contraste com o texto */
+  filter: brightness(0.84) saturate(1.04);
   transition: filter 0.25s ease;
 }
 
@@ -198,6 +199,8 @@ a {
 .hero-slide-overlay {
   position: absolute;
   inset: 0;
+  /* Mantém apenas uma leve transparência colorida sobre a imagem */
+  opacity: 0.55;
 }
 
 .hero-slide-content {
@@ -207,6 +210,12 @@ a {
   min-width: 0;
   padding-top: clamp(3.25rem, 8vw, 7rem) !important;
   padding-bottom: clamp(4.5rem, 9vw, 7rem) !important;
+}
+
+.hero-slide-content h1,
+.hero-slide-content p,
+.hero-slide-content > div > div:first-child {
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.38);
 }
 
 .hero-slide-content > div,
@@ -525,7 +534,11 @@ tr:nth-child(even) td {
   }
 
   .hero-slide-bg {
-    filter: brightness(0.46) !important;
+    filter: brightness(0.76) saturate(1.03) !important;
+  }
+
+  .hero-slide-overlay {
+    opacity: 0.50;
   }
 
   .hero-slide-content {
