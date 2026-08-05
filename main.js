@@ -55,6 +55,8 @@
     if (width >= 768) {
       setMobileMenu(false);
     }
+
+    requestAnimationFrame(syncHeroSize);
   }
 
   function scheduleResponsiveLayout() {
@@ -105,6 +107,40 @@
   const progress = qs('#hero-progress');
   const carouselInterval = 4500;
 
+
+  /**
+   * Calcula a altura exata da área visual usando a proporção natural
+   * da imagem ativa. Dessa forma nenhum banner é cortado ou distorcido.
+   */
+  function syncHeroSize() {
+    if (!hero || !slides.length) return;
+
+    const activeSlide = slides[state.currentSlide] || slides[0];
+    const image = qs('.hero-slide-bg', activeSlide);
+    if (!image) return;
+
+    const applySize = () => {
+      const heroWidth = Math.max(280, Math.round(hero.getBoundingClientRect().width));
+      const naturalWidth = Number(image.naturalWidth) || 16;
+      const naturalHeight = Number(image.naturalHeight) || 9;
+      const ratio = naturalWidth / naturalHeight;
+      const mediaHeight = Math.max(220, Math.round(heroWidth / ratio));
+      const infoHeight = parseFloat(
+        getComputedStyle(root).getPropertyValue('--hero-info-height')
+      ) || 94;
+
+      root.style.setProperty('--hero-media-height', `${mediaHeight}px`);
+      hero.style.height = `${mediaHeight + infoHeight}px`;
+      hero.style.minHeight = `${mediaHeight + infoHeight}px`;
+    };
+
+    if (image.complete && image.naturalWidth > 0) {
+      applySize();
+    } else {
+      image.addEventListener('load', applySize, { once: true });
+    }
+  }
+
   function restartProgress() {
     if (!progress) return;
 
@@ -134,6 +170,7 @@
       dot.setAttribute('aria-current', String(active));
     });
 
+    requestAnimationFrame(syncHeroSize);
     restartProgress();
   }
 
@@ -184,6 +221,14 @@
       startCarousel();
     }, { passive: true });
   }
+
+
+  slides.forEach(slide => {
+    const image = qs('.hero-slide-bg', slide);
+    image?.addEventListener('load', () => {
+      if (slide.classList.contains('active')) syncHeroSize();
+    });
+  });
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) stopCarousel();

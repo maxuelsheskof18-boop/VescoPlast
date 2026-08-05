@@ -1,0 +1,16 @@
+VESCOPLAST — IMAGENS LOCAIS
+
+Mantenha esta estrutura:
+
+index.html
+style.css
+main.js
+Imagens/
+  copo descartavel.png
+  Filme Stretch.png
+  Fitas adesivas.png
+  Saco de lixo.png
+  Saco Plastico PP.png
+
+Os nomes, espaços, letras maiúsculas e minúsculas devem permanecer exatamente assim.
+Em hospedagens Linux, "Imagens" e "imagens" são pastas diferentes.

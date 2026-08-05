@@ -186,8 +186,7 @@ a {
 }
 
 .hero-slide-bg {
-  /* Banner mais visível: imagem clara, mantendo contraste com o texto */
-  filter: brightness(0.84) saturate(1.04);
+  filter: brightness(0.65);
   transition: filter 0.25s ease;
 }
 
@@ -199,8 +198,6 @@ a {
 .hero-slide-overlay {
   position: absolute;
   inset: 0;
-  /* Mantém apenas uma leve transparência colorida sobre a imagem */
-  opacity: 0.55;
 }
 
 .hero-slide-content {
@@ -210,12 +207,6 @@ a {
   min-width: 0;
   padding-top: clamp(3.25rem, 8vw, 7rem) !important;
   padding-bottom: clamp(4.5rem, 9vw, 7rem) !important;
-}
-
-.hero-slide-content h1,
-.hero-slide-content p,
-.hero-slide-content > div > div:first-child {
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.38);
 }
 
 .hero-slide-content > div,
@@ -534,11 +525,7 @@ tr:nth-child(even) td {
   }
 
   .hero-slide-bg {
-    filter: brightness(0.76) saturate(1.03) !important;
-  }
-
-  .hero-slide-overlay {
-    opacity: 0.50;
+    filter: brightness(0.46) !important;
   }
 
   .hero-slide-content {
@@ -1155,5 +1142,617 @@ tr:nth-child(even) td {
     min-height: 38px;
     padding-block: 0.55rem !important;
     font-size: 0.66rem !important;
+  }
+}
+
+/* =========================================================
+   IMAGENS LOCAIS DOS BANNERS
+   O HTML aponta para a pasta ./Imagens no mesmo nível do index.
+   ========================================================= */
+.hero-slide-bg {
+  filter: brightness(0.88) saturate(1.04) !important;
+  object-position: center center;
+}
+
+.hero-slide-overlay {
+  opacity: 0.58;
+}
+
+.hero-slide-content h1,
+.hero-slide-content p,
+.hero-slide-content .mb-5 {
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.46);
+}
+
+@media (max-width: 767px) {
+  .hero-slide-bg {
+    filter: brightness(0.8) saturate(1.03) !important;
+  }
+
+  .hero-slide-overlay {
+    opacity: 0.52;
+  }
+}
+
+/* =========================================================
+   SLIDE 1 — PRESERVA O PREÇO IMPRESSO NA IMAGEM
+   O conteúdo textual fica no lado direito no desktop, deixando
+   a etiqueta e o preço do lado esquerdo completamente livres.
+   ========================================================= */
+@media (min-width: 768px) {
+  #slide-0 .hero-slide-overlay {
+    opacity: 1;
+    background: linear-gradient(
+      90deg,
+      rgba(7, 59, 39, 0.04) 0%,
+      rgba(7, 59, 39, 0.08) 43%,
+      rgba(7, 59, 39, 0.62) 58%,
+      rgba(7, 59, 39, 0.82) 100%
+    ) !important;
+  }
+
+  #slide-0 .hero-slide-content {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: clamp(8.5rem, 12vw, 12rem) !important;
+  }
+
+  #slide-0 .hero-slide-content > div {
+    width: min(35rem, 47vw);
+    max-width: 35rem;
+    margin-left: auto;
+  }
+}
+
+/* Em tablets, reduz o recuo para não encostar nos selos laterais. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  #slide-0 .hero-slide-content {
+    padding-right: 8.75rem !important;
+  }
+
+  #slide-0 .hero-slide-content > div {
+    width: min(31rem, 55vw);
+  }
+}
+
+/* No celular, usa a parte direita da foto e mantém o preço fora
+   da área principal do texto, sem alterar os outros slides. */
+@media (max-width: 767px) {
+  #slide-0 .hero-slide-bg {
+    object-position: 72% center;
+  }
+
+  #slide-0 .hero-slide-overlay {
+    opacity: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(7, 59, 39, 0.34) 0%,
+      rgba(7, 59, 39, 0.62) 52%,
+      rgba(7, 59, 39, 0.84) 100%
+    ) !important;
+  }
+}
+
+
+/* =========================================================
+   HERO — AJUSTE GERAL DOS 5 BANNERS
+   - mostra o banner inteiro
+   - evita texto em cima da etiqueta/preço
+   - padroniza uma área segura de texto
+   ========================================================= */
+.hero-slide {
+  background: linear-gradient(135deg, #d9e7e0 0%, #eef4f1 100%);
+}
+
+.hero-slide-bg {
+  object-fit: contain;
+  object-position: center center;
+}
+
+.hero-slide-overlay {
+  opacity: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(7, 59, 39, 0.14) 0%,
+    rgba(7, 59, 39, 0.14) 44%,
+    rgba(7, 59, 39, 0.26) 62%,
+    rgba(7, 59, 39, 0.52) 100%
+  ) !important;
+}
+
+.hero-slide-content {
+  display: flex;
+  align-items: center;
+}
+
+.hero-slide-content > div {
+  width: min(33rem, 100%);
+  max-width: min(33rem, calc(100vw - 16rem));
+  margin-left: auto;
+  margin-right: clamp(7rem, 11vw, 11rem);
+  padding: clamp(1.1rem, 2vw, 1.5rem);
+  border-radius: 1.35rem;
+  background: linear-gradient(135deg, rgba(7, 59, 39, 0.42), rgba(7, 59, 39, 0.24));
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: 0 22px 50px rgba(2, 6, 23, 0.20);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.hero-slide-content .mb-5 {
+  margin-bottom: 1rem !important;
+}
+
+.hero-slide-content .mt-5 {
+  margin-top: 1rem !important;
+}
+
+.hero-slide-content .mt-8 {
+  margin-top: 1.4rem !important;
+}
+
+.hero-slide-content h1 {
+  max-width: 12ch;
+}
+
+.hero-slide-content p {
+  max-width: 28rem;
+}
+
+@media (min-width: 768px) and (max-width: 1100px) {
+  .hero-slide-content > div {
+    max-width: min(30rem, calc(100vw - 13.5rem));
+    margin-right: 6.5rem;
+    padding: 1rem 1.1rem;
+  }
+
+  .hero-slide-content h1 {
+    font-size: clamp(2rem, 4.4vw, 3rem) !important;
+  }
+
+  .hero-slide-content p {
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-section {
+    height: clamp(610px, calc(var(--app-height) - var(--header-height)), 700px);
+    min-height: 610px;
+  }
+
+  .hero-slide-bg {
+    object-fit: contain;
+    object-position: center center;
+    filter: brightness(0.92) saturate(1.02) !important;
+  }
+
+  .hero-slide-overlay {
+    background: linear-gradient(
+      180deg,
+      rgba(7, 59, 39, 0.24) 0%,
+      rgba(7, 59, 39, 0.30) 30%,
+      rgba(7, 59, 39, 0.62) 60%,
+      rgba(7, 59, 39, 0.86) 100%
+    ) !important;
+  }
+
+  .hero-slide-content {
+    align-items: flex-start;
+    padding-top: 2.1rem !important;
+    padding-bottom: 4.8rem !important;
+  }
+
+  .hero-slide-content > div {
+    max-width: min(22rem, calc(100vw - 2rem));
+    margin-inline: auto;
+    padding: 0.95rem 1rem;
+    background: linear-gradient(135deg, rgba(7, 59, 39, 0.50), rgba(7, 59, 39, 0.34));
+    box-shadow: 0 14px 35px rgba(2, 6, 23, 0.18);
+  }
+
+  .hero-slide-content h1 {
+    max-width: 11ch;
+  }
+
+  .hero-slide-content p {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 479px) {
+  .hero-section {
+    height: 630px;
+    min-height: 630px;
+  }
+
+  .hero-slide-content {
+    padding-top: 1.55rem !important;
+  }
+
+  .hero-slide-content > div {
+    max-width: calc(100vw - 1.25rem);
+    padding: 0.88rem 0.9rem;
+  }
+
+  .hero-slide-content h1 {
+    font-size: clamp(1.65rem, 8vw, 2.2rem) !important;
+  }
+
+  .hero-slide-content p {
+    font-size: 0.92rem !important;
+    line-height: 1.45 !important;
+  }
+}
+
+
+/* =========================================================
+   HERO FINAL — IMAGEM PREENCHENDO A TELA + CONTEÚDO FORA DELA
+   A arte ocupa toda a largura sem faixas laterais. O texto e os
+   botões ficam em uma barra inferior própria, sem cobrir produto,
+   preço ou informações já existentes no banner.
+   ========================================================= */
+:root {
+  --hero-info-height: 132px;
+}
+
+.hero-section {
+  height: clamp(600px, calc(var(--app-height) - var(--header-height)), 720px);
+  min-height: 600px;
+  background: #fff;
+}
+
+.hero-slide {
+  display: block;
+  background: #fff;
+}
+
+.hero-slide-bg,
+.hero-slide-video {
+  top: 0;
+  bottom: auto;
+  width: 100%;
+  height: calc(100% - var(--hero-info-height));
+  object-fit: cover;
+  object-position: center center;
+}
+
+.hero-slide-bg {
+  filter: brightness(0.94) saturate(1.02) !important;
+}
+
+.hero-slide-overlay {
+  top: 0;
+  bottom: auto;
+  height: calc(100% - var(--hero-info-height));
+  opacity: 1 !important;
+  background: linear-gradient(
+    90deg,
+    rgba(7, 59, 39, 0.06) 0%,
+    rgba(7, 59, 39, 0.02) 50%,
+    rgba(7, 59, 39, 0.10) 100%
+  ) !important;
+}
+
+.hero-slide-content {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 12;
+  display: flex;
+  width: 100%;
+  height: var(--hero-info-height);
+  min-height: var(--hero-info-height);
+  align-items: center;
+  padding: 0 clamp(7.5rem, 11vw, 10rem) 0 var(--page-gutter) !important;
+  border-top: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 -12px 32px rgba(15, 23, 42, 0.08);
+}
+
+.hero-slide-content > div {
+  display: grid;
+  width: min(100%, 80rem);
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.hero-slide-content .mb-5 {
+  display: none !important;
+}
+
+.hero-slide-content h1 {
+  max-width: 24ch;
+  margin: 0 !important;
+  color: var(--brand-900) !important;
+  font-size: clamp(1.45rem, 2.3vw, 2.2rem) !important;
+  line-height: 1.08 !important;
+  text-shadow: none !important;
+}
+
+.hero-slide-content h1 span {
+  color: var(--brand-600) !important;
+}
+
+.hero-slide-content p {
+  display: none !important;
+}
+
+.hero-slide-content .mt-8 {
+  display: flex;
+  flex: 0 0 auto;
+  margin: 0 !important;
+  gap: 0.7rem;
+}
+
+.hero-slide-content .btn-primary,
+.hero-slide-content .btn-ghost {
+  min-height: 46px;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.88rem;
+  white-space: nowrap;
+}
+
+.hero-slide-content .btn-primary {
+  border: 1px solid #dbe5e0;
+  background: var(--brand-50);
+  color: var(--brand-700);
+  box-shadow: none;
+}
+
+.hero-slide-content .btn-ghost {
+  border: 1px solid var(--brand-600);
+  background: var(--brand-600);
+  color: #fff;
+}
+
+.hero-dots {
+  bottom: calc(var(--hero-info-height) + 1rem);
+}
+
+.hero-progress {
+  bottom: var(--hero-info-height);
+}
+
+.hero-selos {
+  top: auto !important;
+  right: 1rem !important;
+  bottom: calc(var(--hero-info-height) + 1rem) !important;
+}
+
+/* Remove por completo as regras antigas de posicionamento exclusivo do slide 1. */
+#slide-0 .hero-slide-content,
+#slide-1 .hero-slide-content,
+#slide-2 .hero-slide-content,
+#slide-3 .hero-slide-content,
+#slide-4 .hero-slide-content {
+  justify-content: initial;
+}
+
+#slide-0 .hero-slide-content > div,
+#slide-1 .hero-slide-content > div,
+#slide-2 .hero-slide-content > div,
+#slide-3 .hero-slide-content > div,
+#slide-4 .hero-slide-content > div {
+  width: min(100%, 80rem);
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+#slide-0 .hero-slide-bg,
+#slide-1 .hero-slide-bg,
+#slide-2 .hero-slide-bg,
+#slide-3 .hero-slide-bg,
+#slide-4 .hero-slide-bg {
+  object-position: center center;
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --hero-info-height: 146px;
+  }
+
+  .hero-slide-content {
+    padding-right: var(--page-gutter) !important;
+  }
+
+  .hero-slide-content > div {
+    gap: 1rem;
+  }
+
+  .hero-slide-content h1 {
+    font-size: clamp(1.3rem, 3vw, 1.85rem) !important;
+  }
+
+  .hero-selos {
+    right: 0.75rem !important;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --hero-info-height: 190px;
+  }
+
+  .hero-section {
+    height: 630px;
+    min-height: 630px;
+  }
+
+  .hero-slide-bg {
+    object-fit: cover;
+    object-position: center center;
+    filter: brightness(0.92) saturate(1.02) !important;
+  }
+
+  .hero-slide-overlay {
+    background: rgba(7, 59, 39, 0.06) !important;
+  }
+
+  .hero-slide-content {
+    height: var(--hero-info-height);
+    min-height: var(--hero-info-height);
+    align-items: center;
+    padding: 0.9rem 1rem !important;
+  }
+
+  .hero-slide-content > div {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+
+  .hero-slide-content h1 {
+    max-width: none;
+    font-size: clamp(1.25rem, 6vw, 1.65rem) !important;
+    text-align: center;
+  }
+
+  .hero-slide-content .mt-8 {
+    width: 100%;
+    gap: 0.6rem;
+  }
+
+  .hero-slide-content .btn-primary,
+  .hero-slide-content .btn-ghost {
+    width: 50%;
+    min-width: 0;
+    white-space: normal;
+  }
+
+  .hero-dots {
+    bottom: calc(var(--hero-info-height) + 0.7rem);
+  }
+
+  .hero-progress {
+    bottom: var(--hero-info-height);
+  }
+}
+
+@media (max-width: 479px) {
+  :root {
+    --hero-info-height: 205px;
+  }
+
+  .hero-section {
+    height: 620px;
+    min-height: 620px;
+  }
+
+  .hero-slide-content {
+    padding: 0.8rem 0.75rem !important;
+  }
+
+  .hero-slide-content .mt-8 {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .hero-slide-content .btn-primary,
+  .hero-slide-content .btn-ghost {
+    width: 100%;
+    min-height: 43px;
+    padding: 0.65rem 0.75rem;
+    font-size: 0.82rem;
+  }
+}
+
+
+/* =========================================================
+   AJUSTE AUTOMÁTICO PELA PROPORÇÃO REAL DE CADA BANNER
+   O JS define --hero-media-height usando naturalWidth/naturalHeight.
+   Isso evita cortes, distorções e faixas laterais.
+   ========================================================= */
+:root {
+  --hero-media-height: 56.25vw;
+  --hero-info-height: 94px;
+}
+
+.hero-section {
+  height: calc(var(--hero-media-height) + var(--hero-info-height)) !important;
+  min-height: 0 !important;
+  transition: height 0.28s ease;
+  background: #eef4f1;
+}
+
+.hero-slide-bg,
+.hero-slide-video {
+  top: 0 !important;
+  bottom: auto !important;
+  width: 100% !important;
+  height: var(--hero-media-height) !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  background: #eef4f1;
+}
+
+.hero-slide-overlay {
+  top: 0 !important;
+  bottom: auto !important;
+  height: var(--hero-media-height) !important;
+  background: rgba(7, 59, 39, 0.05) !important;
+}
+
+.hero-slide-content {
+  height: var(--hero-info-height) !important;
+  min-height: var(--hero-info-height) !important;
+}
+
+.hero-dots {
+  bottom: calc(var(--hero-info-height) + 0.75rem) !important;
+}
+
+.hero-progress {
+  bottom: var(--hero-info-height) !important;
+}
+
+.hero-selos {
+  bottom: calc(var(--hero-info-height) + 1rem) !important;
+}
+
+@media (max-width: 1023px) {
+  :root {
+    --hero-info-height: 116px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --hero-info-height: 170px;
+  }
+
+  .hero-section {
+    height: calc(var(--hero-media-height) + var(--hero-info-height)) !important;
+    min-height: 0 !important;
+  }
+
+  .hero-slide-bg,
+  .hero-slide-video {
+    object-fit: contain !important;
+    object-position: center center !important;
+  }
+}
+
+@media (max-width: 479px) {
+  :root {
+    --hero-info-height: 190px;
+  }
+
+  .hero-section {
+    height: calc(var(--hero-media-height) + var(--hero-info-height)) !important;
+    min-height: 0 !important;
   }
 }
