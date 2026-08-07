@@ -1756,3 +1756,99 @@ tr:nth-child(even) td {
     min-height: 0 !important;
   }
 }
+
+
+/* =========================================================
+   CORREÇÃO FINAL MOBILE
+   No celular, nenhuma informação pode ficar sobre a foto.
+   Os selos voltam para a faixa abaixo do banner.
+   ========================================================= */
+@media (max-width: 767px) {
+  .hero-selos,
+  .hero-selo-item {
+    display: none !important;
+  }
+
+  .mobile-badges-row {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem !important;
+    padding: 0.75rem 1rem 0.25rem !important;
+    background: #ffffff !important;
+    border-bottom: 0 !important;
+  }
+
+  .m-badge-card {
+    min-height: 56px;
+    padding: 0.7rem 0.75rem !important;
+    border-radius: 0.85rem !important;
+    box-shadow: 0 8px 18px rgba(2, 6, 23, 0.06) !important;
+  }
+
+  .m-badge-text {
+    font-size: 0.74rem !important;
+    line-height: 1.12 !important;
+  }
+
+  .hero-section {
+    margin-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 479px) {
+  .mobile-badges-row {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.6rem !important;
+    padding: 0.7rem 0.75rem 0.1rem !important;
+  }
+
+  .m-badge-card {
+    padding: 0.62rem 0.65rem !important;
+  }
+
+  .m-badge-icon {
+    width: 32px !important;
+    height: 32px !important;
+    flex-basis: 32px !important;
+  }
+
+  .m-badge-text {
+    font-size: 0.7rem !important;
+  }
+}
+
+
+/* =========================================================
+   IDENTIDADE VESCOPLAST — LOGO OFICIAL
+   ========================================================= */
+.brand-logo-wrap {
+  display: inline-flex;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 0.8rem;
+  background: #fff;
+}
+
+.brand-logo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.brand-logo-wrap--footer {
+  background: transparent;
+}
+
+@media (max-width: 767px) {
+  .brand-logo-wrap {
+    width: 36px;
+    height: 36px;
+    flex-basis: 36px;
+    border-radius: 0.65rem;
+  }
+}
